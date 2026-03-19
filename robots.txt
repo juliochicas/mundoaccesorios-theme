@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://novarelief.store/smart-neck-massager/sitemap.xml
