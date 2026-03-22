@@ -232,10 +232,15 @@ function ma_ai_render_panel() {
                     <div style="display:grid;grid-template-columns:1fr;gap:10px">
                         <?php
                         $img_types = [
-                            'producto'   => [ '📦 Hero (Fondo Neutro)', '1:1 · Limpio y centrado', '1000x1000' ],
-                            'lifestyle'  => [ '📸 Ambientes (Lifestyle)', '1:1 · Situación real cuadrada', '1000x1000' ],
-                            'horizontal' => [ '🖥️ Banner Ancho (Desktop)', '16:9 · Ideal para cabeceras y cruces', '1920x1080' ],
-                            'vertical'   => [ '📱 Vertical (Stories)', '9:16 · Formato de pauta móvil', '1080x1920' ],
+                            'angle1' => [ '📊 1. Gráfico de Beneficios', '1:1 · Iconos y texto minimalista limpio', '1000x1000' ],
+                            'angle2' => [ '📸 2. Lifestyle / En Uso', '4:5 · Entorno real, iluminación cálida natural', '1080x1350' ],
+                            'angle3' => [ '⚖️ 3. Antes vs Después', '1:1 · Comparativa split vertical visual', '1000x1000' ],
+                            'angle4' => [ '⚙️ 4. Características Técnicas', '1:1 · Callouts sobre fondo oscuro tech', '1000x1000' ],
+                            'angle5' => [ '📱 5. Infografía Completa', '4:5 · Specs, beneficios y plano estilizado', '1080x1350' ],
+                            'angle6' => [ '🌟 6. Social Proof / Testimonio', '4:5 · Cita de cliente con 5 estrellas oro', '1080x1350' ],
+                            'angle7' => [ '🎯 7. Retargeting (Urgencia)', '1:1 · "Still thinking about it?", 20% off CTA', '1000x1000' ],
+                            'angle8' => [ '⏳ 8. Banner Promo / Flash', '16:9 · Letras grandes, impacto visual alto', '1920x1080' ],
+                            'angle9' => [ '📖 9. Guía de Uso (How-To)', '9:16 · Tutorial de 4 pasos estilo Pinterest', '1080x1920' ],
                         ];
                         foreach ( $img_types as $key => [$label, $desc, $size] ) :
                         ?>
@@ -265,12 +270,48 @@ function ma_ai_render_panel() {
             <!-- TAB: Video Veo ────────────────────────────── -->
             <div id="ma-ai-tab-videos" class="ma-ai-tab-pane" style="display:none">
                 <div style="margin-bottom:16px">
-                    <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:6px">Descripción del escenario o animación para el video</label>
-                    <textarea id="ai_vid_desc" rows="2" placeholder="Ej: Toma cinemática de dron girando alrededor del producto sobre una mesa de madera con iluminación LED..." style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;box-sizing:border-box"></textarea>
+                    <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:6px">🎬 Templates de Alta Conversión (Veo Testimonials)</label>
+                    <select id="ai_vid_template" style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:6px;margin-bottom:12px;font-size:13px;background:#f9fafb;">
+                        <option value="">-- Escribir mi propio prompt --</option>
+                        <option value="0">01. Garage / Toyota / Hombre Latino 38-45</option>
+                        <option value="1">02. Parqueo Moderno / Mazda / Mujer Latina 35-42</option>
+                        <option value="2">03. Carport Casa / VW Blanco / Hombre Latino 45-52</option>
+                        <option value="3">04. Esquina Mall / Honda Azul / Mujer Latina 40-48</option>
+                        <option value="4">05. Calle Residencial / Hyundai Silver / Hombre Latino 33-40</option>
+                        <option value="5">06. Garage Herramientas / Kia Black / Hombre Latino 48-55</option>
+                        <option value="6">07. Parqueo Techado / Nissan Gray / Mujer Latina 36-44</option>
+                        <option value="7">08. Parqueo Edificio / Toyota White / Hombre Latino 35-43</option>
+                        <option value="8">09. Garage Abierto / Mazda Blue / Mujer Latina 30-38</option>
+                        <option value="9">10. Condominio Verde / VW Red / Hombre Latino 42-50</option>
+                        <option value="10">11. Avatar Hablante (Optimizado Lip-Sync)</option>
+                        <option value="11">12. Vestuario Digital (Cambiar ropa a la foto)</option>
+                    </select>
+
+                    <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:6px">Prompt final para Veo (Puedes personalizar el diálogo o carro)</label>
+                    <textarea id="ai_vid_desc" rows="6" placeholder="Ej: Toma cinemática de dron..." style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:12px;font-family:monospace;box-sizing:border-box"></textarea>
                 </div>
                 <button type="button" id="ma-ai-gen-video" style="background:linear-gradient(135deg, #ec4899, #be185d);color:#fff;padding:12px 16px;border-radius:8px;border:none;font-size:14px;font-weight:600;width:100%;cursor:pointer;box-shadow:0 4px 6px -1px rgba(236,72,153,0.3);transition:0.2s">
-                    🎥 Iniciar Renderizado de Video (2-4 min)
+                    🎥 Iniciar Renderizado Veo (2-4 min)
                 </button>
+
+                <div style="margin-top:20px;padding-top:16px;border-top:1px solid #e5e7eb">
+                    <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:6px">✍️ Asistente de Guiones (Crea el texto para tu actor/voz en off)</label>
+                    <div style="display:flex;gap:10px;margin-bottom:10px">
+                        <select id="ai_vid_script_type" style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;">
+                            <option value="ugc">1. UGC Clásico (Selfie/Testimonial realista)</option>
+                            <option value="ba">2. Before & After (Antes/Después)</option>
+                            <option value="top3">3. Top 3 Razones</option>
+                            <option value="hook">4. Hook con Pregunta Provocadora</option>
+                            <option value="lifestyle">5. Estilo Aspiracional (Lifestyle)</option>
+                            <option value="fbhook">6. Hooks de 3 Segundos (Facebook Ads)</option>
+                            <option value="curiosity">7. Curiosidad + Emoción (Ej: Lo que nadie te dice...)</option>
+                            <option value="promise">8. Promesa Directa (Ej: Resultados en 7 días...)</option>
+                        </select>
+                        <button type="button" id="ma-ai-gen-script" style="background:#111827;color:#fff;padding:10px 14px;border-radius:6px;border:none;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">
+                            Generar Guion
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- Feedback ─────────────────── -->
@@ -317,6 +358,33 @@ function ma_ai_render_panel() {
             $(this).css({ background: '#ffffff', color: '#111827', boxShadow:'0 1px 3px rgba(0,0,0,0.1)' });
             $('.ma-ai-tab-pane').hide();
             $('#ma-ai-tab-' + tab).show();
+        });
+
+        // ── Veo Templates Logic ────────────────────────────────
+        var veo_prompts = [
+`IMPORTANT (NO ON-SCREEN TEXT):\n- Do NOT generate any on-screen text of any kind...\nABSOLUTE REFERENCE LOCK (NON-NEGOTIABLE):\n- Use the attached reference image as the ONLY source of truth...\nREALISM LOCK:\n- No magic, no VFX...\nFORMAT:\n- Vertical 9:16, duration 15–20 seconds.\nLOCATION:\n- Covered residential garage in Guatemala, daylight entering from the side.\nCAR:\n- Toyota sedan, gray.\nCAST / WARDROBE / VIBE:\n- Latino male, 38–45, polo gris, jeans.\nDIALOGUE:\n“Yo lo uso todas las semanas y el brillo se mantiene. Lo recomiendo totalmente.”\nSHOT LIST:\n1) (0–6s) Medium shot...\n2) (6–12s) Close-up...\n3) (12–15s)...`,
+`IMPORTANT (NO ON-SCREEN TEXT):\n- Do NOT generate any on-screen text of any kind...\nABSOLUTE REFERENCE LOCK (NON-NEGOTIABLE):\n- Use the attached reference image as the ONLY source of truth...\nFORMAT:\n- Vertical 9:16, duration 15–20 seconds.\nLOCATION:\n- Modern condominium parking in Guatemala.\nCAR:\n- Mazda sedan, red.\nCAST / WARDROBE / VIBE:\n- Latina female, 35–42, camisa blanca casual.\nDIALOGUE:\n“Yo no tenía tiempo para encerar el carro, pero con este coating lo hago en minutos.”\nSHOT LIST:\n1) Medium shot...\n2) Close-up spray...`,
+`IMPORTANT (NO ON-SCREEN TEXT):\n- Do NOT generate any on-screen text of any kind...\nABSOLUTE REFERENCE LOCK (NON-NEGOTIABLE):\n- Use the attached reference image as the ONLY source of truth...\nFORMAT:\n- Vertical 9:16.\nLOCATION:\n- Simple carport with metal roof, warm daylight.\nCAR:\n- VW sedan, white.\nCAST / WARDROBE / VIBE:\n- Latino male, 45–52, camisa azul clara.\nDIALOGUE:\n“Lo que me gustó es que no es complicado: rociás, limpias y el brillo se nota.”\nSHOT LIST: \n1) Medium shot...\n2) Close-up spray...`,
+`IMPORTANT (NO ON-SCREEN TEXT):\n- Do NOT generate any on-screen text of any kind...\nABSOLUTE REFERENCE LOCK (NON-NEGOTIABLE):\n- Use the attached reference image as the ONLY source of truth...\nFORMAT:\n- Vertical 9:16.\nLOCATION:\n- Mall parking area (quiet corner).\nCAR:\n- Honda, navy blue.\nCAST / WARDROBE / VIBE:\n- Latina female, 40–48, camiseta negra lisa.\nDIALOGUE:\n“Para un carro de uso diario, esto es lo más cómodo: brillo constante y aplicación sencilla.”\nSHOT LIST: \n1) Medium shot...\n2) Close-up spray...`,
+`IMPORTANT (NO ON-SCREEN TEXT):\n- Do NOT generate any on-screen text of any kind...\nABSOLUTE REFERENCE LOCK (NON-NEGOTIABLE):\n- Use the attached reference image as the ONLY source of truth...\nFORMAT:\n- Vertical 9:16.\nLOCATION:\n- Quiet residential street in Guatemala under tree shade.\nCAR:\n- Hyundai sedan, silver.\nCAST / WARDROBE / VIBE:\n- Latino male, 33–40, camiseta beige.\nDIALOGUE:\n“Si manejas todos los días, necesitas algo fácil. Yo lo aplico rápido y listo.”\nSHOT LIST: \n1) Medium shot...\n2) Close-up spray...`,
+`IMPORTANT (NO ON-SCREEN TEXT):\n- Do NOT generate any on-screen text of any kind...\nABSOLUTE REFERENCE LOCK (NON-NEGOTIABLE):\n- Use the attached reference image as the ONLY source of truth...\nFORMAT:\n- Vertical 9:16.\nLOCATION:\n- Covered garage with shelves/tools blurred in background.\nCAR:\n- Kia, black.\nCAST / WARDROBE / VIBE:\n- Latino male, 48–55, camisa a cuadros casual.\nDIALOGUE:\n“En Guatemala el polvo se pega fácil. Esto me ayuda a que la pintura se mantenga mejor.”\nSHOT LIST: \n1) Medium shot...\n2) Close-up spray...`,
+`IMPORTANT (NO ON-SCREEN TEXT):\n- Do NOT generate any on-screen text of any kind...\nABSOLUTE REFERENCE LOCK (NON-NEGOTIABLE):\n- Use the attached reference image as the ONLY source of truth...\nFORMAT:\n- Vertical 9:16.\nLOCATION:\n- Covered parking with soft warm lighting (early evening).\nCAR:\n- Nissan, dark gray.\nCAST / WARDROBE / VIBE:\n- Latina female, 36–44, suéter ligero.\nDIALOGUE:\n“Me preguntaban qué uso para que se mire así. Es esto, y lo aplico en minutos.”\nSHOT LIST: \n1) Medium shot...\n2) Close-up spray...`,
+`IMPORTANT (NO ON-SCREEN TEXT):\n- Do NOT generate any on-screen text of any kind...\nABSOLUTE REFERENCE LOCK (NON-NEGOTIABLE):\n- Use the attached reference image as the ONLY source of truth...\nFORMAT:\n- Vertical 9:16.\nLOCATION:\n- Building parking with strong side light creating crisp highlights.\nCAR:\n- Toyota, white.\nCAST / WARDROBE / VIBE:\n- Latino male, 35–43, camisa verde oliva.\nDIALOGUE:\n“Si quieres que el agua resbale y la pintura se vea más viva, mirá cómo queda.”\nSHOT LIST: \n1) Medium shot...\n2) Close-up spray...`,
+`IMPORTANT (NO ON-SCREEN TEXT):\n- Do NOT generate any on-screen text of any kind...\nABSOLUTE REFERENCE LOCK (NON-NEGOTIABLE):\n- Use the attached reference image as the ONLY source of truth...\nFORMAT:\n- Vertical 9:16.\nLOCATION:\n- Residential garage with door open; daylight spill.\nCAR:\n- Mazda, blue.\nCAST / WARDROBE / VIBE:\n- Latina female, 30–38, camisa de mezclilla.\nDIALOGUE:\n“Yo antes dejaba el carro opaco por falta de tiempo. Con esto lo dejo presentable en minutos.”\nSHOT LIST: \n1) Medium shot...\n2) Close-up spray...`,
+`IMPORTANT (NO ON-SCREEN TEXT):\n- Do NOT generate any on-screen text of any kind...\nABSOLUTE REFERENCE LOCK (NON-NEGOTIABLE):\n- Use the attached reference image as the ONLY source of truth...\nFORMAT:\n- Vertical 9:16.\nLOCATION:\n- Condominium parking with plants/greenery, sunny day.\nCAR:\n- VW, red.\nCAST / WARDROBE / VIBE:\n- Latino male, 42–50, polo blanco.\nDIALOGUE:\n“Si quieres brillo real sin perder tiempo, este spray es lo más práctico que he probado.”\nSHOT LIST: \n1) Medium shot...\n2) Close-up spray...`,
+`Subject: Use the exact uploaded image. Do not modify the face, body, pose, clothing, or background. Only animate lips, eyes, and very subtle natural head micro-movements.\nBackground: Keep identical to the original input photo.\nStyle: POV influencer-style talking video, handheld subtle camera motion, ultra-realistic. Vertical 9:16.\nDialogue: in Spanish, Latin American accent. Add a short 1-second natural pause before speaking. Say: "[SCRIPT]"\nAudio: Voice only. Add 0.5 seconds of silence before and after the spoken line to stabilize synchronization.\nModel: veo-3\nDuration: 8 seconds\nResolution: 720p (9:16)`,
+`Subject: Same person from the uploaded image, keep the same face and appearance. Do NOT change the face.\nBackground: Keep the same as the uploaded image.\nClothing: The person is wearing [DESCRIBE LA NUEVA ROPA AQUÍ].\nAction: The person shows off the new outfit and speaks to the camera.\nStyle: realistic, handheld selfie-style, vertical 9:16.\nDialogue: in Spanish. Say: "[SCRIPT]"\nBackground sounds: none\nModel: veo-3\nDuration: 8 seconds`
+        ];
+
+        $('#ai_vid_template').on('change', function() {
+            var val = $(this).val();
+            if (val !== "") {
+                $('#ai_vid_desc').val(veo_prompts[parseInt(val)]);
+                $('#ai_vid_desc').css({border: '2px solid #10b981', background: '#ecfdf5'});
+                setTimeout(() => $('#ai_vid_desc').css({border: '1px solid #d1d5db', background: '#ffffff'}), 800);
+            } else {
+                $('#ai_vid_desc').val('');
+            }
         });
 
         // ── Upload zone drag & drop ─────────────────────────────
@@ -433,6 +501,38 @@ function ma_ai_render_panel() {
             });
         });
 
+        // ── Generar Script de Video (VEO3 Gemini) ──────────────
+        $('#ma-ai-gen-script').on('click', function() {
+            var pname = $('#ai_detected_name').val() || $('#ai_product_name').val() || 'Este Producto';
+            var type = $('#ai_vid_script_type').val();
+            var prompt = '';
+            if (type === 'ugc') prompt = 'Eres un creador de guiones UGC estilo selfie/testimonial. Genera un guion corto y natural en bloques de 8 segundos para VEO3, donde una persona habla de su experiencia con '+pname+'. Debe sonar auténtico, como si grabara con su celular, incluyendo expresiones cotidianas y una recomendación final.';
+            if (type === 'ba') prompt = 'Eres un guionista experto en anuncios Before & After. Crea un guion en bloques de 8 segundos para VEO3 que muestre el “antes” con un problema y el “después” con la solución gracias a '+pname+'. Debe ser claro, visual y con un llamado a la acción al final.';
+            if (type === 'top3') prompt = 'Eres especialista en copy persuasivo para TikTok/Instagram. Escribe un guion en bloques de 8 segundos para VEO3 con "Las 3 razones por las que deberías usar '+pname+'". Cada razón debe ser breve, directa y fácil de recordar, cerrando con un CTA fuerte.';
+            if (type === 'lifestyle') prompt = 'Eres un creador de guiones aspiracionales/lifestyle. Escribe un guion en bloques de 8 segundos para VEO3 donde se muestre cómo '+pname+' mejora la vida del usuario. Debe transmitir estilo de vida, beneficios emocionales y sensación de logro, cerrando con un CTA inspirador.';
+            if (type === 'fbhook') prompt = 'Eres un Marketer profesional enfocado en la comercialización de productos a través de anuncios en Facebook Ads. Crea hooks (ganchos) interesantes para los primeros 3 a 5 segundos de un anuncio en video para mi producto "'+pname+'", que sea impactante y llame la atención. El gancho debe mantener un lenguaje cercano, atacar directamente el problema que resuelve, y ser muy rápido de decir en cámara.';
+            if (type === 'curiosity') prompt = 'Eres un experto en redactar guiones virales de alta retención. Crea un guion en bloques de 8 segundos para VEO3 aplicando la fórmula "Curiosidad + Emoción" para el producto "'+pname+'". Empieza con una frase como "Lo que nadie te dice sobre..." o "El secreto que descubrí...", mostrando un descubrimiento impactante y cerrando con un fuerte CTA.';
+            if (type === 'promise') prompt = 'Eres un copywriter especializado en respuesta directa. Crea un guion en bloques de 8 segundos para VEO3 enfocado en una "Promesa Directa" para el producto "'+pname+'". Ofrece un beneficio claro y fuerte en los primeros 3 segundos, demuestra cómo se logra y termina con urgencia para comprar.';
+            
+            resetUI();
+            var $btn = $(this).text('Generando...').prop('disabled', true);
+            progress(50, 'Gemini escribiendo guion magistral...');
+            $.ajax({
+                url: AJAX_URL, method: 'POST',
+                data: { action: 'ma_ai_generate_all', _nonce: NONCE, product_name: pname, product_desc: prompt, sections: 'seo' },
+                success: function(res) {
+                    progress(100, 'Guion completado ✅');
+                    if (res.success && res.data && res.data.seo) {
+                        $('#ma-ai-result-text').html('<strong>🎬 Tu Guion Final:</strong><br><br>' + res.data.seo.description);
+                        $('#ma-ai-result').show();
+                        $('#ma-ai-apply').hide(); // No se inyecta, solo se copia
+                    } else { showError('Error generando el guion'); }
+                    $btn.text('Generar Guion').prop('disabled', false);
+                },
+                error: function() { showError('Error de conexión'); $btn.text('Generar Guion').prop('disabled', false); }
+            });
+        });
+
         // ── Generar imagen ─────────────────────────────────────
         $('#ma-ai-gen-image').on('click', function() {
             var desc  = $('#ai_img_desc').val().trim();
@@ -470,9 +570,15 @@ function ma_ai_render_panel() {
                                     $(this).text('¡Aplicado! ✅').css('background', '#059669');
                                     alert('¡Imagen inyectada exitosamente en la sección!');
                                 } else {
-                                    navigator.clipboard.writeText(url).then(function() {
-                                        alert('URL copiada al portapapeles (Asignación automática solo funciona dentro del Personalizador).');
-                                    });
+                                    var $input = $('.ma-ai-target-' + targetField);
+                                    if ($input.length) {
+                                        $input.val(url).css('background', '#dcfce3');
+                                        $(this).text('¡Aplicado! ✅').css('background', '#059669');
+                                    } else {
+                                        navigator.clipboard.writeText(url).then(function() {
+                                            alert('URL copiada al portapapeles (Asignación automática solo funciona dentro del Personalizador).');
+                                        });
+                                    }
                                 }
                             });
                             $wrap.append($img, $btn2);
@@ -499,10 +605,10 @@ function ma_ai_render_panel() {
             var basePrompt = $('#ai_img_desc').val() || $('#ai_detected_features').val() || 'High quality commercial product shot';
             
             var kit = [
-                { field: 'hero_image_url', type: 'producto', size: '1000x1000', label: 'Imagen Hero', suffix: 'Fondo blanco limpio iluminado estilo estudio Apple.' },
-                { field: 'stats_img', type: 'horizontal', size: '1920x1080', label: 'Fondo Stats', suffix: 'Fotografía panorámica cinemática, entorno lifestyle elegante difuminado atrás.' },
-                { field: 'cs1_img', type: 'lifestyle', size: '1000x1000', label: 'Cross-Sell 1 (Lifestyle)', suffix: 'Escena real en uso, composición lifestyle natural.' },
-                { field: 'demo_poster', type: 'horizontal', size: '1920x1080', label: 'Banner Demo / Video', suffix: 'Visual impactante comercial, fondo atractivo oscuro.' }
+                { field: 'hero_image_url', type: 'angle1', size: '1000x1000', label: 'Imagen Hero', suffix: 'Un visual para página de producto. Encuadre: close-up, iluminación: estudio brillante, estilo: minimalista y limpio. Reserva espacio alrededor para texto. 4K, nítido, estructura clara.' },
+                { field: 'stats_img', type: 'angle8', size: '1920x1080', label: 'Fondo Stats', suffix: 'Un visual para banner promocional ancho. Encuadre: amplio, iluminación: cinemática de alto contraste, estilo: comercial premium. Reserva área central izquierda para viñetas. 4K, nítido, ultra realista.' },
+                { field: 'cs1_img', type: 'angle2', size: '1000x1000', label: 'Cross-Sell (Lifestyle)', suffix: 'Un visual para post social de estilo de vida. Encuadre: medio plano, iluminación: luz natural cálida, estilo: orgánico y aspiracional. 4K, hiperrealista, fotografía premiada.' },
+                { field: 'demo_poster', type: 'angle4', size: '1920x1080', label: 'Banner Demo / Video', suffix: 'Un visual para póster de demostración técnica. Encuadre: close-up dinámico, iluminación: direccional fuerte, estilo: tech moderno. Reserva márgenes para características. 4K, renderizado impecable.' }
             ];
             
             var $btn = $(this).prop('disabled', true);
@@ -550,9 +656,15 @@ function ma_ai_render_panel() {
                                     wp.customize('ma_settings['+fieldTarget+']').set(url);
                                     $(this).text('¡Aplicado! ✅').css('background', '#10b981');
                                 } else {
-                                    navigator.clipboard.writeText(url).then(function() {
-                                        alert('Asignación automática solo funciona dentro del Personalizador. Se ha copiado la URL.');
-                                    });
+                                    var $input = $('.ma-ai-target-' + fieldTarget);
+                                    if ($input.length) {
+                                        $input.val(url).css('background', '#dcfce3');
+                                        $(this).text('¡Aplicado! ✅').css('background', '#10b981');
+                                    } else {
+                                        navigator.clipboard.writeText(url).then(function() {
+                                            alert('Asignación automática solo funciona dentro del Personalizador. Se ha copiado la URL.');
+                                        });
+                                    }
                                 }
                             });
                         })(item.field, $btn2);
@@ -627,7 +739,9 @@ function ma_ai_render_panel() {
                     } else {
                         // Admin page mode
                         var $field = $(map[key]);
+                        var $metaField = $('.ma-ai-target-' + key);
                         if ($field.length) { $field.val(generated[key]).trigger('change'); applied++; }
+                        if ($metaField.length) { $metaField.val(generated[key]).css('background', '#dcfce3'); applied++; }
                     }
                 }
             });
@@ -1018,7 +1132,31 @@ add_action( 'wp_ajax_ma_ai_generate_image', function() {
 
     if ( ! $b64 ) wp_send_json_error( 'El generador falló sin mensaje o no devolvió imagen válida.' );
 
-    wp_send_json_success( [ 'url' => 'data:image/jpeg;base64,' . $b64 ] );
+    $image_data = base64_decode($b64);
+    if ( ! $image_data ) wp_send_json_error( 'Error al decodificar la imagen base64 de la IA.' );
+
+    $filename = 'ai-gen-' . $image_type . '-' . time() . '.jpg';
+    $upload = wp_upload_bits( $filename, null, $image_data );
+
+    if ( ! empty($upload['error']) ) wp_send_json_error( 'Error al subir la imagen a WordPress: ' . $upload['error'] );
+
+    $attachment = [
+        'post_mime_type' => 'image/jpeg',
+        'post_title'     => preg_replace( '/\.[^.]+$/', '', $filename ),
+        'post_content'   => 'Imagen generada por Gemini AI (' . $image_type . ')',
+        'post_status'    => 'inherit'
+    ];
+    $attach_id = wp_insert_attachment( $attachment, $upload['file'] );
+    
+    if ( ! is_wp_error( $attach_id ) ) {
+        if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
+            require_once( ABSPATH . 'wp-admin/includes/image.php' );
+        }
+        $attach_data = wp_generate_attachment_metadata( $attach_id, $upload['file'] );
+        wp_update_attachment_metadata( $attach_id, $attach_data );
+    }
+
+    wp_send_json_success( [ 'url' => $upload['url'], 'attachment_id' => $attach_id ] );
 } );
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -1345,9 +1483,26 @@ add_action( 'wp_ajax_ma_ai_generate_video_check', function() {
 
     if ( empty($video_b64) ) wp_send_json_error('Bytes de video no localizados en la respuesta JSON.');
 
-    // Save MP4
+    // Save MP4 to FTP
     $upload = wp_upload_bits('veo_demo_' . time() . '.mp4', null, base64_decode($video_b64));
     if ( $upload['error'] ) wp_send_json_error( $upload['error'] );
 
-    wp_send_json_success( [ 'status' => 'COMPLETED', 'url' => $upload['url'] ] );
+    // Register as WordPress Media Library Attachment to keep it perfectly ordered
+    $wp_filetype = wp_check_filetype(basename($upload['file']), null);
+    $attachment = array(
+        'post_mime_type' => $wp_filetype['type'],
+        'post_title'     => sanitize_file_name(basename($upload['file'])),
+        'post_content'   => '',
+        'post_status'    => 'inherit'
+    );
+    $attach_id = wp_insert_attachment( $attachment, $upload['file'] );
+    if ( is_wp_error($attach_id) ) {
+        wp_send_json_error('El archivo se guardó físicamente, pero falló el registro en WordPress: ' . $attach_id->get_error_message());
+    }
+    require_once( ABSPATH . 'wp-admin/includes/image.php' );
+    $attach_data = wp_generate_attachment_metadata( $attach_id, $upload['file'] );
+    wp_update_attachment_metadata( $attach_id, $attach_data );
+
+    wp_send_json_success( [ 'status' => 'COMPLETED', 'url' => $upload['url'], 'attachment_id' => $attach_id ] );
 });
+
