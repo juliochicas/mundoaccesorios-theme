@@ -164,7 +164,7 @@ function ma_ai_render_panel() {
                     <label style="display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:8px">Bloques a generar</label>
                     <div style="display:flex;flex-wrap:wrap;gap:10px;background:#f8fafc;padding:12px;border-radius:8px;border:1px solid #e2e8f0">
                         <?php
-                        $sections = ['hero' => '🦸 Hero', 'ticker' => '📣 Ticker', 'features'=> '✨ Features', 'stats' => '📊 Stats', 'cta' => '🏁 Cierre', 'seo' => '🔍 Meta', 'oferta' => '🎯 Promos'];
+                        $sections = ['hero' => '🦸 Hero', 'ticker' => '📣 Ticker', 'features'=> '✨ Features', 'stats' => '📊 Stats', 'cta' => '🏁 Cierre', 'seo' => '🔍 Meta', 'oferta' => '🎯 Promos', 'reviews' => '💬 Testimonios'];
                         foreach ( $sections as $key => $label ) :
                         ?>
                         <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:#475569;cursor:pointer">
@@ -232,15 +232,15 @@ function ma_ai_render_panel() {
                     <div style="display:grid;grid-template-columns:1fr;gap:10px">
                         <?php
                         $img_types = [
-                            'angle1' => [ '📊 1. Gráfico de Beneficios', '1:1 · Iconos y texto minimalista limpio', '1000x1000' ],
-                            'angle2' => [ '📸 2. Lifestyle / En Uso', '4:5 · Entorno real, iluminación cálida natural', '1080x1350' ],
-                            'angle3' => [ '⚖️ 3. Antes vs Después', '1:1 · Comparativa split vertical visual', '1000x1000' ],
-                            'angle4' => [ '⚙️ 4. Características Técnicas', '1:1 · Callouts sobre fondo oscuro tech', '1000x1000' ],
-                            'angle5' => [ '📱 5. Infografía Completa', '4:5 · Specs, beneficios y plano estilizado', '1080x1350' ],
-                            'angle6' => [ '🌟 6. Social Proof / Testimonio', '4:5 · Cita de cliente con 5 estrellas oro', '1080x1350' ],
-                            'angle7' => [ '🎯 7. Retargeting (Urgencia)', '1:1 · "Still thinking about it?", 20% off CTA', '1000x1000' ],
-                            'angle8' => [ '⏳ 8. Banner Promo / Flash', '16:9 · Letras grandes, impacto visual alto', '1920x1080' ],
-                            'angle9' => [ '📖 9. Guía de Uso (How-To)', '9:16 · Tutorial de 4 pasos estilo Pinterest', '1080x1920' ],
+                            'angle1' => [ '📊 1. Gráfico de Beneficios', '1:1 · Iconos y texto minimalista limpio 💡 Sugerido: Características', '1000x1000' ],
+                            'angle2' => [ '📸 2. Lifestyle / En Uso', '4:5 · Entorno real, iluminación cálida natural 💡 Sugerido: En Uso Real / Resultados', '1080x1350' ],
+                            'angle3' => [ '🌓 3. Antes vs Después', '1:1 · Comparativa split vertical visual 💡 Sugerido: Before & After', '1000x1000' ],
+                            'angle4' => [ '⚙️ 4. Características Técnicas', '1:1 · Callouts sobre fondo oscuro tech 💡 Sugerido: Banner / Demo Tech', '1000x1000' ],
+                            'angle5' => [ '📱 5. Infografía Completa', '4:5 · Specs, beneficios y plano estilizado 💡 Sugerido: Infografía Detalle', '1080x1350' ],
+                            'angle6' => [ '⭐ 6. Social Proof / Testimonio', '4:5 · Cita de cliente con 5 estrellas oro 💡 Sugerido: Testimonios', '1080x1350' ],
+                            'angle7' => [ '🎯 7. Retargeting (Urgencia)', '1:1 · "Still thinking about it?", 20% off CTA 💡 Sugerido: Oferta Retargeting', '1000x1000' ],
+                            'angle8' => [ '⏳ 8. Banner Promo / Flash', '16:9 · Letras grandes, impacto visual alto 💡 Sugerido: Stats (Resultados)', '1920x1080' ],
+                            'angle9' => [ '📋 9. Guía de Uso (How-To)', '9:16 · Tutorial de 4 pasos estilo Pinterest 💡 Sugerido: FAQ / Guía', '1080x1920' ],
                         ];
                         foreach ( $img_types as $key => [$label, $desc, $size] ) :
                         ?>
@@ -523,9 +523,16 @@ function ma_ai_render_panel() {
                 success: function(res) {
                     progress(100, 'Guion completado ✅');
                     if (res.success && res.data && res.data.seo) {
-                        $('#ma-ai-result-text').html('<strong>🎬 Tu Guion Final:</strong><br><br>' + res.data.seo.description);
+                        var cleanedScript = res.data.seo.description.replace(/<[^>]*>?/gm, ''); // Remove HTML tags
+                        $('#ma-ai-result-text').html('<strong>🎬 Tu Guion Final:</strong><br><br>' + res.data.seo.description + '<div style="margin-top:10px;font-size:12px;color:#059669;">✨ <i>Guion aplicado automáticamente al cuadro de texto de Veo arriba.</i></div>');
                         $('#ma-ai-result').show();
-                        $('#ma-ai-apply').hide(); // No se inyecta, solo se copia
+                        $('#ma-ai-apply').hide();
+                        
+                        // Auto-inject into Veo Prompt
+                        var currentPrompt = $('#ai_vid_desc').val();
+                        if (currentPrompt.indexOf('[SCRIPT]') !== -1) {
+                            $('#ai_vid_desc').val(currentPrompt.replace('[SCRIPT]', cleanedScript));
+                        }
                     } else { showError('Error generando el guion'); }
                     $btn.text('Generar Guion').prop('disabled', false);
                 },
@@ -555,10 +562,18 @@ function ma_ai_render_panel() {
                             var url  = img.url || img;
                             var $wrap = $('<div>').css({ position:'relative', borderRadius:'8px', overflow:'hidden' });
                             var $img  = $('<img>').attr('src', url).css({ width:'100%', display:'block', cursor:'pointer', borderRadius:'8px' });
-                            var targetField = 'hero_image_url';
-                            if (type === 'horizontal') targetField = 'stats_img';
-                            if (type === 'lifestyle') targetField = 'cs1_img';
-                            if (type === 'vertical') targetField = 'cs2_img';
+                            var fieldMap = {
+                                'angle1': 'feat_img',      // Gráfico Beneficios -> Características
+                                'angle2': 'cs1_img',       // Lifestyle -> Lifestyle principal
+                                'angle3': 'ba_img',        // Antes vs Después -> Before & After
+                                'angle4': 'demo_poster',   // Características -> Demo Poster
+                                'angle5': 'detalle_img',   // Infografía -> Detalles
+                                'angle6': 'review_img',    // Social Proof -> Testimonios
+                                'angle7': 'oferta_img',    // Retargeting -> Oferta
+                                'angle8': 'stats_img',     // Banner Flash -> Resultados / Stats
+                                'angle9': 'faq_img'        // Guía de uso -> FAQ
+                            };
+                            var targetField = fieldMap[type] || 'hero_image_url';
 
                             var $btn2 = $('<button>').text('Inyectar al Diseño').css({
                                 position:'absolute', bottom:'8px', left:'50%', transform:'translateX(-50%)',
@@ -605,10 +620,16 @@ function ma_ai_render_panel() {
             var basePrompt = $('#ai_img_desc').val() || $('#ai_detected_features').val() || 'High quality commercial product shot';
             
             var kit = [
-                { field: 'hero_image_url', type: 'angle1', size: '1000x1000', label: 'Imagen Hero', suffix: 'Un visual para página de producto. Encuadre: close-up, iluminación: estudio brillante, estilo: minimalista y limpio. Reserva espacio alrededor para texto. 4K, nítido, estructura clara.' },
-                { field: 'stats_img', type: 'angle8', size: '1920x1080', label: 'Fondo Stats', suffix: 'Un visual para banner promocional ancho. Encuadre: amplio, iluminación: cinemática de alto contraste, estilo: comercial premium. Reserva área central izquierda para viñetas. 4K, nítido, ultra realista.' },
-                { field: 'cs1_img', type: 'angle2', size: '1000x1000', label: 'Cross-Sell (Lifestyle)', suffix: 'Un visual para post social de estilo de vida. Encuadre: medio plano, iluminación: luz natural cálida, estilo: orgánico y aspiracional. 4K, hiperrealista, fotografía premiada.' },
-                { field: 'demo_poster', type: 'angle4', size: '1920x1080', label: 'Banner Demo / Video', suffix: 'Un visual para póster de demostración técnica. Encuadre: close-up dinámico, iluminación: direccional fuerte, estilo: tech moderno. Reserva márgenes para características. 4K, renderizado impecable.' }
+                { field: 'hero_image_url', type: 'angle1', size: '1000x1000', label: 'Imagen Hero', suffix: 'Un visual para página de producto. Encuadre: close-up, iluminación: estudio brillante, estilo: minimalista y limpio. Reserva espacio vacío alrededor. 4K, nítido. IMPORTANTE: NO INCLUIR NINGÚN TIPO DE TEXTO, LETRAS NI PALABRAS RECONOCIBLES. SOLO VISUAL PURO.' },
+                { field: 'stats_img', type: 'angle8', size: '1920x1080', label: 'Fondo Oferta Flash', suffix: 'Un visual para banner promocional ancho. Encuadre: amplio, iluminación: cinemática de alto contraste, estilo: premium. Reserva área central limpia. 4K, ultra realista. IMPORTANTE: NO INCLUIR NINGÚN TIPO DE TEXTO, LETRAS NI PALABRAS RECONOCIBLES. SOLO VISUAL PURO.' },
+                { field: 'cs1_img', type: 'angle2', size: '1000x1000', label: 'Lifestyle / En Uso', suffix: 'Un visual para post social de estilo de vida. Encuadre: medio plano, iluminación: luz natural cálida, estilo: orgánico y aspiracional. 4K, fotografía premiada. IMPORTANTE: NO INCLUIR NINGÚN TIPO DE TEXTO, LETRAS NI PALABRAS RECONOCIBLES. SOLO VISUAL PURO.' },
+                { field: 'demo_poster', type: 'angle4', size: '1920x1080', label: 'Características Técnicas', suffix: 'Un visual para póster de demostración técnica. Encuadre: close-up dinámico, luz direccional fuerte, estilo: tech moderno. Deja márgenes vacíos. 4K, renderizado impecable. IMPORTANTE: NO INCLUIR NINGÚN TIPO DE TEXTO, LETRAS NI PALABRAS RECONOCIBLES. SOLO VISUAL PURO.' },
+                { field: 'ba_img', type: 'angle3', size: '1000x1000', label: 'Antes vs Después', suffix: 'Un visual dividido verticalmente. Lado izquierdo demuestra el dolor. Lado derecho demuestra solución. Iluminación comercial. 4K, hiperrealista. IMPORTANTE: NO INCLUIR NINGÚN TIPO DE TEXTO, LETRAS NI PALABRAS RECONOCIBLES. SOLO VISUAL PURO.' },
+                { field: 'feat_img', type: 'angle1', size: '1000x1000', label: 'Gráfico Beneficios', suffix: 'Un visual enfocado en características del producto. Estilo: limpio, iconos tridimensionales abstractos integrados sin letras. 4K. IMPORTANTE: NO INCLUIR NINGÚN TIPO DE TEXTO, LETRAS NI PALABRAS RECONOCIBLES. SOLO VISUAL PURO.' },
+                { field: 'detalle_img', type: 'angle5', size: '1080x1350', label: 'Infografía Detalle', suffix: 'Un visual infográfico vertical. Encuadre completo, diagrama de partes con líneas y nodos señalando componentes clave, pero sin texto. 4K. IMPORTANTE: NO INCLUIR NINGÚN TIPO DE TEXTO, LETRAS NI PALABRAS RECONOCIBLES. SOLO VISUAL PURO.' },
+                { field: 'review_img', type: 'angle6', size: '1080x1350', label: 'Testimonio Visual', suffix: 'Un visual de un cliente sonriente con el producto. Estilo: UGC, luz natural, 5 estrellas doradas flotando (sin letras). 4K. IMPORTANTE: NO INCLUIR NINGÚN TIPO DE TEXTO, LETRAS NI PALABRAS RECONOCIBLES. SOLO VISUAL PURO.' },
+                { field: 'oferta_img', type: 'angle7', size: '1000x1000', label: 'Retargeting / Urgencia', suffix: 'Un visual publicitario enfocado en la escasez visual (reloj, candado). Impacto visual altísimo para generar urgencia. 4K. IMPORTANTE: NO INCLUIR NINGÚN TIPO DE TEXTO, LETRAS NI PALABRAS RECONOCIBLES. SOLO VISUAL PURO.' },
+                { field: 'faq_img', type: 'angle9', size: '1080x1920', label: 'Guía de Uso (How-To)', suffix: 'Un visual vertical mostrando contexto de uso cotidiano. Estilo: Fotografía editorial tipo Pinterest, sumamente estética. 4K. IMPORTANTE: NO INCLUIR NINGÚN TIPO DE TEXTO, LETRAS NI PALABRAS RECONOCIBLES. SOLO VISUAL PURO.' }
             ];
             
             var $btn = $(this).prop('disabled', true);
@@ -725,6 +746,15 @@ function ma_ai_render_panel() {
                 oferta_flash:        'input[name="oferta_flash"]',
                 seo_title:           'input[name="seo_title"]',
                 seo_description:     'textarea[name="seo_description"]',
+                rev1_name:           'input[name="rev1_name"]',
+                rev1_city:           'input[name="rev1_city"]',
+                rev1_text:           'input[name="rev1_text"]',
+                rev2_name:           'input[name="rev2_name"]',
+                rev2_city:           'input[name="rev2_city"]',
+                rev2_text:           'input[name="rev2_text"]',
+                rev3_name:           'input[name="rev3_name"]',
+                rev3_city:           'input[name="rev3_city"]',
+                rev3_text:           'input[name="rev3_text"]',
             };
             var applied = 0;
             Object.keys(map).forEach(function(key) {
@@ -762,9 +792,19 @@ function ma_ai_render_panel() {
         var videoPollInterval;
         $('#ma-ai-gen-video').on('click', function() {
             var desc = $('#ai_vid_desc').val().trim();
-            var photoB64 = $('#ai_product_photo').prop('files')[0] ? $('#ma-ai-preview-img').attr('src') : '';
-            if ( ! desc ) return alert('Describe el entorno del video.');
-            if ( ! photoB64 ) return alert('Por favor, sube la foto del producto en el Paso 1 (Analizar) para inyectarlo en el video.');
+            var photoB64 = $('#ma-ai-preview-img').attr('src') || '';
+            if (photoB64 && photoB64.indexOf('placeholder') !== -1) photoB64 = '';
+            
+            // Validaciones Frontend para ahorrar créditos API
+            if ( ! photoB64 ) {
+                return showError('⚠️ Falta foto de referencia. Ve a la pestaña superior "Redacción Rápida" y selecciona o genera una foto para el producto.');
+            }
+            if ( desc.indexOf('[SCRIPT]') !== -1 ) {
+                return showError('⚠️ Tu instrucción contiene "<b>[SCRIPT]</b>". Debes presionar el botón de "Generar Guion" abajo para redactar el diálogo antes de iniciar el video.');
+            }
+            if ( desc.length < 20 ) {
+                return showError('⚠️ La instrucción (Prompt) es muy corta. Selecciona un Template o escribe una descripción más detallada.');
+            }
             
             var $btn = $(this);
             $btn.prop('disabled', true).text('⏳ Iniciando motor Veo 3.1...');
@@ -809,7 +849,10 @@ function ma_ai_render_panel() {
                             
                             // Re-bind click event for dynamic button
                             $(document).off('click', '#ma-ai-apply-video').on('click', '#ma-ai-apply-video', function() {
-                                if (typeof wp !== 'undefined' && wp.customize && wp.customize('ma_settings[demo_video_src]')) {
+                                if ($('#_ma_demo_video_src').length) {
+                                    $('#_ma_demo_video_src').val(videoUrl);
+                                    $(this).text('¡Aplicado al Producto! ✅').css('background', '#059669');
+                                } else if (typeof wp !== 'undefined' && wp.customize && wp.customize('ma_settings[demo_video_src]')) {
                                     wp.customize('ma_settings[demo_video_src]').set(videoUrl);
                                     $(this).text('¡Aplicado! ✅').css('background', '#059669');
                                     alert('¡Video de demostración asignado!');
@@ -931,7 +974,22 @@ add_action( 'wp_ajax_ma_ai_generate_all', function() {
     $price_text = $product_price ? "Precio: Q{$product_price}." : '';
     $audience_text = $audience ? "Público objetivo: {$audience}." : '';
 
-    $prompt = "Eres un experto en copywriting de conversión para e-commerce en Guatemala.
+    // 🔥 MODO EXPERTO: Lógica Dividida (Guion de Video vs Landing Page Completa) 🔥
+    if ( $sections === 'seo' ) {
+        // El frontend solicitó solo un Guion de Video
+        $prompt = "Producto: {$product_name}. {$price_text} {$audience_text}
+Instrucción: {$product_desc}
+
+Genera el guion solicitado. Responde SOLO en JSON válido con este formato estricto:
+{
+  \"seo\": {
+    \"description\": \"(Tu guion completo final en formato HTML. Usa <strong> para destacar tiempos como '0:00 - 0:08' y haz saltos de línea con <br>)\"
+  }
+}
+Solo JSON, sin comentarios.";
+    } else {
+        // MODO PREDETERMINADO: Landing Page Completa
+        $prompt = "Eres un experto en copywriting de conversión para e-commerce en Guatemala.
 Producto: {$product_name}. {$price_text} {$audience_text}
 Descripción adicional: {$product_desc}
 
@@ -959,9 +1017,19 @@ Genera copy AIDA de alta conversión en español (Guatemala). Responde SOLO en J
   \"cta_btn\": \"texto botón de compra final\",
   \"seo_title\": \"meta título SEO (máx 60 chars, incluye nombre + beneficio principal + Guatemala)\",
   \"seo_description\": \"meta descripción SEO (máx 155 chars, incluye CTA y palabra clave)\",
+  \"rev1_name\": \"Nombre Inventado 1 (Ej: Andrea P.)\",
+  \"rev1_city\": \"Ciudad inventada de Guatemala (Ej: Mixco, Xela)\",
+  \"rev1_text\": \"Testimonio persuasivo cortísimo sobre cómo le alivió o sirvió (máx 15 palabras)\",
+  \"rev2_name\": \"Nombre Inventado 2\",
+  \"rev2_city\": \"Ciudad inventada de Guatemala\",
+  \"rev2_text\": \"Testimonio destacando precio o calidad del producto (máx 15 palabras)\",
+  \"rev3_name\": \"Nombre Inventado 3\",
+  \"rev3_city\": \"Ciudad inventada de Guatemala\",
+  \"rev3_text\": \"Testimonio súper feliz con el resultado final (máx 15 palabras)\",
   \"product_long_html\": \"Redacción persuasiva completa en formato HTML nativo para la web. Usa etiquetas <h2>, <h3>, <ul>, <li>, <strong> y emojis abundantes para vender. Mínimo 100 palabras. Debe verse visualmente espectacular cuando se publique.\"
 }
 Solo JSON, sin comentarios ni markdown.";
+    }
 
     $gemini_key = ma_get('gemini_api_key', '');
 
@@ -1034,17 +1102,36 @@ add_action( 'wp_ajax_ma_ai_generate_image', function() {
 
     $description = sanitize_textarea_field( $_POST['description'] ?? '' );
     $image_type  = sanitize_text_field( $_POST['image_type'] ?? 'producto' );
+    $size_val    = sanitize_text_field( $_POST['size'] ?? '1000x1000' );
     $photo_b64   = $_POST['photo_base64'] ?? '';
+
+    // Mapear tamaño a Aspect Ratio de Imagen 4
+    $aspect = '1:1';
+    if ( strpos($size_val, '1920x1080') !== false ) { $aspect = '16:9'; }
+    elseif ( strpos($size_val, '1080x1920') !== false ) { $aspect = '9:16'; }
+    elseif ( strpos($size_val, '1080x1350') !== false ) { $aspect = '4:5'; }
+    elseif ( strpos($size_val, '3:4') !== false ) { $aspect = '3:4'; }
 
     // 🔥 Auto-Enhancement: Expansión lógica de prompts cortos vía Gemini Text 🔥
     if ( strlen($description) < 30 ) {
-        $contexto_base = $description ? $description : "Producto no especificado";
-        $estilo_fotografico = ($image_type === 'producto') 
-            ? "un set de estudio minimalista con fondo totalmente blanco y sombras suaves" 
-            : "un entorno lifestyle espectacular, lujoso, cinemático o natural que aumente el deseo de compra";
+        $contexto_base = $description ? $description : "The product";
+        
+        $estilo = [
+            'angle1' => "A minimalist studio shot on a solid pastel background. Must leave 70% empty negative space on the left side. Extremely clean, 8k, product photography.",
+            'angle2' => "A cinematic lifestyle shot. A happy person actively using the product in a real, beautifully decorated home environment. Natural sunlight.",
+            'angle3' => "A strict vertical split-screen photography. Left half shows a person suffering from the problem. Right half shows the person happy, relieved, using the product. Professional side-by-side comparison.",
+            'angle4' => "An extreme close-up macro photography of the product. Focusing on the premium materials, textures, and technological details. Dramatic studio lighting.",
+            'angle5' => "A top-down 'knolling' flat lay photography. The product and its accessories neatly arranged symmetrically on a beautiful surface.",
+            'angle6' => "An authentic UGC (User Generated Content) selfie. A person holding the product taking a mirror selfie in a regular bedroom. Looks like a real iPhone photo, slightly imperfect but authentic.",
+            'angle7' => "The product arriving in a premium open cardboard delivery box, sitting on a kitchen counter. Exciting unboxing experience, natural light.",
+            'angle8' => "An epic wide-angle hero shot. Low angle perspective making the product look powerful and massive. Dramatic studio lighting with colorful gel lights in the background.",
+            'angle9' => "A bright, clear, step-by-step instructional photograph. Close up of hands actively assembling or demonstrating the main feature of the product."
+        ];
+        
+        $estilo_fotografico = $estilo[$image_type] ?? $estilo['angle2'];
             
         $expand_payload = [
-            'contents' => [[ 'parts' => [[ 'text' => "Eres un Director de Arte de Apple. Tenemos el concepto básico de un producto: '$contexto_base'. Crea un PROMPT fotográfico visual en INGLÉS (max 30 palabras) definiendo $estilo_fotografico. Solo responde el prompt directo en inglés." ]] ]]
+            'contents' => [[ 'parts' => [[ 'text' => "You are an Apple Art Director. Base concept: '$contexto_base'. Create a visual photography PROMPT in English (max 35 words). Apply this exact visual style: $estilo_fotografico. Only reply with the prompt." ]] ]]
         ];
         $expand_res = wp_remote_post( "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $gemini_key, [
             'timeout' => 15, 'headers' => [ 'Content-Type' => 'application/json' ], 'body' => wp_json_encode( $expand_payload )
@@ -1058,13 +1145,8 @@ add_action( 'wp_ajax_ma_ai_generate_image', function() {
         }
     }
 
-    $modifiers = '';
-    if ( $image_type === 'producto' )   { $modifiers = 'Plain white studio background, professional lighting.'; }
-    if ( $image_type === 'lifestyle' )  { $modifiers = 'Real aesthetic environment, natural lighting, high quality lifestyle.'; }
-    if ( $image_type === 'horizontal' ) { $modifiers = 'Wide panoramic layout for web banner, aesthetic balance.'; }
-    if ( $image_type === 'vertical' )   { $modifiers = 'Vertical format for stories, visual appeal.'; }
-
-    $final_prompt = "{$description}. {$modifiers} Hyper-realistic product photography, DSLR, 8k resolution.";
+    $random_seed = rand(100000, 999999);
+    $final_prompt = "{$description}. CRITICAL INSTRUCTION: Ensure absolute physical and structural coherence. Cables, plugs, and mechanical parts MUST NOT melt, float, or connect illogically. No physically impossible geometries. ABSOLUTELY NO TEXT, NO LETTERS, NO WORDS IN THE IMAGE. Visual variation seed: {$random_seed} (ensure unique framing).";
 
     $payload = [];
     $is_nano = false;
@@ -1399,11 +1481,28 @@ add_action( 'wp_ajax_ma_ai_generate_video_start', function() {
     $photo_b64 = $_POST['photo_base64'] ?? '';
     if ( ! $photo_b64 ) wp_send_json_error( 'Falta foto de referencia del producto' );
 
-    $mime_type = 'image/jpeg';
-    if (preg_match('#^data:(image/\w+);base64,#i', $photo_b64, $matches)) {
-        $mime_type = $matches[1];
+    if (filter_var($photo_b64, FILTER_VALIDATE_URL)) {
+        // Es un URL (imagen existente o de AI guardada), hay que descargarla y encodearla
+        $img_res = wp_remote_get($photo_b64, ['timeout' => 20]);
+        if (is_wp_error($img_res)) wp_send_json_error("No se pudo descargar la imagen de referencia: " . $img_res->get_error_message());
+        
+        $img_body = wp_remote_retrieve_body($img_res);
+        if (!$img_body) wp_send_json_error("La imagen de referencia está vacía o no es accesible públicamente.");
+        
+        $photo_b64_clean = base64_encode($img_body);
+        
+        // Detectar mime type nativamente
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime_type = $finfo->buffer($img_body);
+        if (!$mime_type) $mime_type = 'image/jpeg';
+    } else {
+        // Ya es Base64 del navegador
+        $mime_type = 'image/jpeg';
+        if (preg_match('#^data:(image/\w+);base64,#i', $photo_b64, $matches)) {
+            $mime_type = $matches[1];
+        }
+        $photo_b64_clean = preg_replace('#^data:image/\w+;base64,#i', '', $photo_b64);
     }
-    $photo_b64_clean = preg_replace('#^data:image/\w+;base64,#i', '', $photo_b64);
 
     $gemini_key = ma_get('gemini_api_key', '');
     $url = "https://generativelanguage.googleapis.com/v1beta/models/veo-2.0-generate-001:predictLongRunning?key=" . $gemini_key;
@@ -1463,7 +1562,13 @@ add_action( 'wp_ajax_ma_ai_generate_video_check', function() {
 
     // Video completado, encontrar los bytes.
     $video_b64 = '';
-    if ( isset($body['response']['predictions'][0]['bytesBase64Encoded']) ) {
+    $video_uri = '';
+    
+    if ( isset($body['response']['generatedVideo']['video']['videoBytes']) ) {
+         $video_b64 = $body['response']['generatedVideo']['video']['videoBytes'];
+    } elseif ( isset($body['response']['generatedVideo']['video']['uri']) ) {
+         $video_uri = $body['response']['generatedVideo']['video']['uri'];
+    } elseif ( isset($body['response']['predictions'][0]['bytesBase64Encoded']) ) {
          $video_b64 = $body['response']['predictions'][0]['bytesBase64Encoded'];
     } elseif ( isset($body['response']['video']['bytesBase64Encoded']) ) {
          $video_b64 = $body['response']['video']['bytesBase64Encoded'];
@@ -1474,17 +1579,27 @@ add_action( 'wp_ajax_ma_ai_generate_video_check', function() {
     } else {
          // Fallback exploratorio
          $json_resp = json_encode($body['response'] ?? []);
-         if (preg_match('/"([a-zA-Z0-9+\/]+={0,2})"/', $json_resp, $m) && strlen($m[1]) > 50000) {
+         if (preg_match('/"([a-zA-Z0-9+\/]+={0,2})"/', $json_resp, $m) && strlen($m[1]) > 20000) {
              $video_b64 = $m[1];
          } else {
-             wp_send_json_error('Video generado pero el formato interno es desconocido.');
+             $keys = json_encode($body['response']);
+             wp_send_json_error("Video generado: $keys");
          }
     }
 
-    if ( empty($video_b64) ) wp_send_json_error('Bytes de video no localizados en la respuesta JSON.');
+    if ( empty($video_b64) && empty($video_uri) ) {
+        wp_send_json_error('No se pudo ubicar el video en este formato JSON: ' . json_encode($body['response']));
+    }
 
     // Save MP4 to FTP
-    $upload = wp_upload_bits('veo_demo_' . time() . '.mp4', null, base64_decode($video_b64));
+    if (!empty($video_uri)) {
+        $video_data = wp_remote_retrieve_body(wp_remote_get($video_uri, ['timeout' => 60]));
+        if (!$video_data) wp_send_json_error("No se pudo descargar el video del URI proporcionado por Google.");
+    } else {
+        $video_data = base64_decode($video_b64);
+    }
+    
+    $upload = wp_upload_bits('veo_demo_' . time() . '.mp4', null, $video_data);
     if ( $upload['error'] ) wp_send_json_error( $upload['error'] );
 
     // Register as WordPress Media Library Attachment to keep it perfectly ordered
