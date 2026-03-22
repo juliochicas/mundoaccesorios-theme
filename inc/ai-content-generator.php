@@ -250,7 +250,7 @@ function ma_ai_render_panel() {
                     </div>
                 </div>
                 <button type="button" id="ma-ai-gen-image" style="background:#0284c7;color:#fff;padding:10px 16px;border-radius:8px;border:none;font-size:14px;font-weight:500;width:100%;cursor:pointer">
-                    🖼️ Pintar con Imagen 4.0
+                    🖼️ Renderizar con Nano Banana Pro ✨
                 </button>
                 <div style="text-align:center;margin:12px 0;font-size:12px;color:#9ca3af;font-weight:600">O AUTOMATIZA TODA LA PÁGINA</div>
                 <button type="button" id="ma-ai-gen-mediakit" style="background:linear-gradient(135deg, #10b981, #059669);color:#fff;padding:12px 16px;border-radius:8px;border:none;font-size:14px;font-weight:700;width:100%;cursor:pointer;box-shadow:0 4px 6px -1px rgba(16,185,129,0.3);transition:0.2s">
@@ -470,11 +470,11 @@ function ma_ai_render_panel() {
                         $('#ma-ai-images-gallery').show();
                         $('#ma-ai-progress').hide();
                     } else { showError(res.data || 'Error al generar imagen'); }
-                    $btn.text('🖼️ Pintar con Imagen 4.0').prop('disabled', false);
+                    $btn.text('🖼️ Renderizar con Nano Banana Pro ✨').prop('disabled', false);
                 },
                 error: function() {
                     showError('Error de conexión con FastAPI');
-                    $btn.text('🖼️ Pintar con Imagen 4.0').prop('disabled', false);
+                    $btn.text('🖼️ Renderizar con Nano Banana Pro ✨').prop('disabled', false);
                 }
             });
         });
