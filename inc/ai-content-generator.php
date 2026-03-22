@@ -455,14 +455,25 @@ function ma_ai_render_panel() {
                             var url  = img.url || img;
                             var $wrap = $('<div>').css({ position:'relative', borderRadius:'8px', overflow:'hidden' });
                             var $img  = $('<img>').attr('src', url).css({ width:'100%', display:'block', cursor:'pointer', borderRadius:'8px' });
-                            var $btn2 = $('<button>').text('Usar').css({
-                                position:'absolute', bottom:'4px', left:'50%', transform:'translateX(-50%)',
-                                background:'#7c3aed', color:'#fff', border:'none', borderRadius:'6px',
-                                padding:'4px 10px', fontSize:'11px', fontWeight:'700', cursor:'pointer', whiteSpace:'nowrap'
+                            var targetField = 'hero_image_url';
+                            if (type === 'horizontal') targetField = 'stats_img';
+                            if (type === 'lifestyle') targetField = 'cs1_img';
+                            if (type === 'vertical') targetField = 'cs2_img';
+
+                            var $btn2 = $('<button>').text('Inyectar al Diseño').css({
+                                position:'absolute', bottom:'8px', left:'50%', transform:'translateX(-50%)',
+                                background:'#10b981', color:'#fff', border:'none', borderRadius:'6px',
+                                padding:'6px 14px', fontSize:'12px', fontWeight:'700', cursor:'pointer', whiteSpace:'nowrap', boxShadow:'0 2px 4px rgba(0,0,0,0.3)'
                             }).on('click', function() {
-                                navigator.clipboard.writeText(url).then(function() {
-                                    alert('URL copiada. Pégala en el campo "Imagen Hero (URL)" del formulario.');
-                                });
+                                if (typeof wp !== 'undefined' && wp.customize && wp.customize('ma_settings['+targetField+']')) {
+                                    wp.customize('ma_settings['+targetField+']').set(url);
+                                    $(this).text('¡Aplicado! ✅').css('background', '#059669');
+                                    alert('¡Imagen inyectada exitosamente en la sección!');
+                                } else {
+                                    navigator.clipboard.writeText(url).then(function() {
+                                        alert('URL copiada al portapapeles (Asignación automática solo funciona dentro del Personalizador).');
+                                    });
+                                }
                             });
                             $wrap.append($img, $btn2);
                             $grid.append($wrap);
