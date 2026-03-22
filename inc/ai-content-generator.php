@@ -911,14 +911,35 @@ add_action( 'wp_ajax_ma_ai_generate_image', function() {
     $image_type  = sanitize_text_field( $_POST['image_type'] ?? 'producto' );
     $photo_b64   = $_POST['photo_base64'] ?? '';
 
-    $modifiers = '';
-    $aspect    = '1:1';
-    if ( $image_type === 'producto' )   { $modifiers = 'Fondo blanco limpio de estudio, iluminación profesional, centrado perfecto.'; $aspect = '1:1'; }
-    if ( $image_type === 'lifestyle' )  { $modifiers = 'Entorno real y estético, iluminación natural, lifestyle de alta calidad.'; $aspect = '1:1'; }
-    if ( $image_type === 'horizontal' ) { $modifiers = 'Formato amplio y panorámico ideal para cabeceras web, composición balanceada.'; $aspect = '16:9'; }
-    if ( $image_type === 'vertical' )   { $modifiers = 'Formato vertical ideal para Instagram o TikTok, composición visual atractiva.'; $aspect = '9:16'; }
+    // 🔥 Auto-Enhancement: Expansión lógica de prompts cortos vía Gemini Text 🔥
+    if ( strlen($description) < 30 ) {
+        $contexto_base = $description ? $description : "Producto no especificado";
+        $estilo_fotografico = ($image_type === 'producto') 
+            ? "un set de estudio minimalista con fondo totalmente blanco y sombras suaves" 
+            : "un entorno lifestyle espectacular, lujoso, cinemático o natural que aumente el deseo de compra";
+            
+        $expand_payload = [
+            'contents' => [[ 'parts' => [[ 'text' => "Eres un Director de Arte de Apple. Tenemos el concepto básico de un producto: '$contexto_base'. Crea un PROMPT fotográfico visual en INGLÉS (max 30 palabras) definiendo $estilo_fotografico. Solo responde el prompt directo en inglés." ]] ]]
+        ];
+        $expand_res = wp_remote_post( "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $gemini_key, [
+            'timeout' => 15, 'headers' => [ 'Content-Type' => 'application/json' ], 'body' => wp_json_encode( $expand_payload )
+        ]);
+        if ( ! is_wp_error($expand_res) && wp_remote_retrieve_response_code($expand_res) == 200 ) {
+            $expand_body = json_decode( wp_remote_retrieve_body($expand_res), true );
+            $expanded_text = $expand_body['candidates'][0]['content']['parts'][0]['text'] ?? '';
+            if ( !empty($expanded_text) ) {
+                $description = trim(preg_replace('/[\n\r]+/', ' ', $expanded_text));
+            }
+        }
+    }
 
-    $final_prompt = "{$description}. {$modifiers} Render hiperrealista fotográfico, DSLR, alta resolución.";
+    $modifiers = '';
+    if ( $image_type === 'producto' )   { $modifiers = 'Plain white studio background, professional lighting.'; }
+    if ( $image_type === 'lifestyle' )  { $modifiers = 'Real aesthetic environment, natural lighting, high quality lifestyle.'; }
+    if ( $image_type === 'horizontal' ) { $modifiers = 'Wide panoramic layout for web banner, aesthetic balance.'; }
+    if ( $image_type === 'vertical' )   { $modifiers = 'Vertical format for stories, visual appeal.'; }
+
+    $final_prompt = "{$description}. {$modifiers} Hyper-realistic product photography, DSLR, 8k resolution.";
 
     $payload = [];
     $is_nano = false;
