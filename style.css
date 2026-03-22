@@ -1,118 +1,22 @@
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-<?php $theme_uri = get_template_directory_uri(); ?>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@800;900&display=swap" />
-  <link rel="icon" type="image/png" sizes="32x32" href="<?= $theme_uri ?>/assets/favicon-32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="<?= $theme_uri ?>/assets/favicon-16.png" />
-  <link rel="apple-touch-icon" sizes="192x192" href="<?= $theme_uri ?>/assets/favicon-192.png" />
-<?php
-// ── SEO dinámico desde settings ──────────────────────────────────────────
-$seo_title   = ma_get('seo_title',       'Masajeador Inteligente de Cuello | Alivio en 10 minutos | Mundo Accesorios GT');
-$seo_desc    = ma_get('seo_description', 'Reduce tensión cervical y estrés diario con calor terapéutico y pulsos EMS. Envío rápido a toda Guatemala. Pago seguro con Stripe.');
-$seo_image   = ma_get('seo_og_image',    ma_get('hero_image_url', ''));
-$canonical   = esc_url( get_permalink() ?: home_url('/') );
-$site_url    = esc_url( home_url() );
-$price_new   = ma_get('hero_price_new', '$49.00');
-$price_num   = preg_replace('/[^0-9.]/', '', $price_new) ?: '49';
+/*
+Theme Name: Mundo Accesorios Theme
+Author: Julio Chicas
+Version: 1.3
+Text Domain: mundoaccesorios
+*/
 
-// FAQs dinámicas para Schema (desde CPT ma_faq, con fallbacks)
-$faqs_q = new WP_Query(['post_type'=>'ma_faq','posts_per_page'=>10,'post_status'=>'publish']);
-$faq_schema = [];
-if ( $faqs_q->have_posts() ) {
-    while ( $faqs_q->have_posts() ) {
-        $faqs_q->the_post();
-        $faq_schema[] = [
-            '@type' => 'Question',
-            'name'  => get_the_title(),
-            'acceptedAnswer' => ['@type'=>'Answer','text'=>wp_strip_all_tags(get_the_content())],
-        ];
-    }
-    wp_reset_postdata();
-} else {
-    $faq_schema = [
-        ['@type'=>'Question','name'=>'¿Cuándo recibo mi pedido?','acceptedAnswer'=>['@type'=>'Answer','text'=>'Despachamos en 24 horas hábiles. En Ciudad de Guatemala 1-2 días. En departamentos 2-4 días hábiles.']],
-        ['@type'=>'Question','name'=>'¿Cómo sé que mi pedido fue confirmado?','acceptedAnswer'=>['@type'=>'Answer','text'=>'Te contactamos por WhatsApp para confirmar tu pedido y darte un número de rastreo antes del despacho.']],
-        ['@type'=>'Question','name'=>'¿Qué métodos de pago aceptan?','acceptedAnswer'=>['@type'=>'Answer','text'=>'Tarjeta de crédito o débito (Visa, Mastercard, AMEX) a través de Stripe. También aceptamos pago contra entrega en zonas habilitadas.']],
-        ['@type'=>'Question','name'=>'¿Tiene garantía?','acceptedAnswer'=>['@type'=>'Answer','text'=>'Sí, 30 días de garantía por defecto de fábrica.']],
-        ['@type'=>'Question','name'=>'¿Puedo devolver el producto?','acceptedAnswer'=>['@type'=>'Answer','text'=>'Sí. Tienes 30 días para solicitar devolución.']],
-    ];
-}
-
-// Schema Product dinámico
-$product_schema = [
-    '@context' => 'https://schema.org',
-    '@type'    => 'Product',
-    'name'     => 'Masajeador Inteligente de Cuello',
-    'description' => $seo_desc,
-    'image'    => [$seo_image],
-    'brand'    => ['@type'=>'Brand','name'=>'Mundo Accesorios'],
-    'offers'   => [
-        '@type'         => 'Offer',
-        'url'           => $canonical,
-        'priceCurrency' => 'USD',
-        'price'         => (float) $price_num,
-        'availability'  => 'https://schema.org/InStock',
-        'itemCondition' => 'https://schema.org/NewCondition',
-        'seller'        => ['@type'=>'Organization','name'=>'Mundo Accesorios'],
-    ],
-    'aggregateRating' => ['@type'=>'AggregateRating','ratingValue'=>4.8,'reviewCount'=>126],
-];
-?>
-  <title><?= esc_html($seo_title) ?></title>
-  <meta name="description" content="<?= esc_attr($seo_desc) ?>" />
-  <meta name="keywords" content="masajeador cervical Guatemala, alivio dolor cuello, EMS cuello, masajeador inteligente Guatemala" />
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-  <meta name="theme-color" content="#0B0B0C" />
-  <meta name="color-scheme" content="dark light" />
-  <link rel="icon" href="<?php echo get_template_directory_uri(); ?>/favicon.ico" />
-  <link rel="apple-touch-icon" href="<?php echo get_template_directory_uri(); ?>/apple-touch-icon.png" />
-  <link rel="canonical" href="<?= $canonical ?>" />
-  <meta property="og:type" content="product" />
-  <meta property="og:locale" content="es_GT" />
-  <meta property="og:site_name" content="Mundo Accesorios" />
-  <meta property="og:title" content="<?= esc_attr($seo_title) ?>" />
-  <meta property="og:description" content="<?= esc_attr($seo_desc) ?>" />
-  <meta property="og:url" content="<?= $canonical ?>" />
-  <meta property="og:image" content="<?= esc_attr($seo_image) ?>" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="<?= esc_attr($seo_title) ?>" />
-  <meta name="twitter:description" content="<?= esc_attr($seo_desc) ?>" />
-  <meta name="twitter:image" content="<?= esc_attr($seo_image) ?>" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="<?= esc_attr($seo_image) ?>" />
-  <link rel="dns-prefetch" href="https://images.unsplash.com">
-  <link rel="dns-prefetch" href="https://cdn.simpleicons.org">
-  <link rel="dns-prefetch" href="https://fastapi.modularis.pro">
-  <link rel="dns-prefetch" href="https://ipapi.co">
-  <link rel="dns-prefetch" href="https://videos.pexels.com">
-  <script type="application/ld+json"><?= wp_json_encode(['@context'=>'https://schema.org','@type'=>'Organization','name'=>'Mundo Accesorios','url'=>$site_url]) ?></script>
-  <script type="application/ld+json"><?= wp_json_encode($product_schema) ?></script>
-  <script type="application/ld+json"><?= wp_json_encode(['@context'=>'https://schema.org','@type'=>'FAQPage','mainEntity'=>$faq_schema]) ?></script>
-  <script>(function(){var s=localStorage.getItem('theme');if(s==='light')document.documentElement.classList.add('theme-light');else if(s==='dark')document.documentElement.classList.remove('theme-light');else if(window.matchMedia('(prefers-color-scheme:light)').matches)document.documentElement.classList.add('theme-light')})()</script>
-  
-<?php wp_head(); ?>
-<style id="critical-inline-css">
-:root {
-      --bg: <?= esc_attr(ma_get('color_bg', '#0B0B0C')) ?>;
-      --surface: <?= esc_attr(ma_get('color_surface', '#141416')) ?>;
-      --surface-2: <?= esc_attr(ma_get('color_surface2', '#1C1C1F')) ?>;
-      --input-bg: <?= esc_attr(ma_get('color_input', '#222225')) ?>;
-      --text: <?= esc_attr(ma_get('color_text', '#F5F5F5')) ?>;
-      --muted: <?= esc_attr(ma_get('color_muted', '#A3A3A3')) ?>;
-      --line: <?= esc_attr(ma_get('color_line', '#2A2D31')) ?>;
-      --line-2: <?= esc_attr(ma_get('color_line2', '#3A3D42')) ?>;
-      --green: <?= esc_attr(ma_get('color_primary', '#F97316')) ?>;
-      --green-text: <?= esc_attr(ma_get('color_primary', '#F97316')) ?>;
-      --purple: <?= esc_attr(ma_get('color_secondary', '#8B5CF6')) ?>;
+    :root {
+      --bg: #0B0B0C;
+      --surface: #141416;
+      --surface-2: #1C1C1F;
+      --input-bg: #222225;
+      --text: #F5F5F5;
+      --muted: #A3A3A3;
+      --line: #2A2D31;
+      --line-2: #3A3D42;
+      --green: #F97316;
+      --green-text: #F97316;
+      --purple: #8B5CF6;
       --success: #22C55E;
       --max: 1240px;
       --radius: 8px;
@@ -181,38 +85,7 @@ $product_schema = [
       gap: 14px;
     }
 
-    .logo {
-      font-family: 'Figtree', 'Montserrat', 'Arial Black', sans-serif;
-      font-size: 22px;
-      font-weight: 900;
-      letter-spacing: -.05em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      text-decoration: none;
-      color: var(--text);
-      display: inline-flex;
-      align-items: center;
-      gap: 0;
-      flex-shrink: 0;
-    }
-    .logo-dot {
-      display: inline-block;
-      width: 7px;
-      height: 7px;
-      background: #E53935;
-      margin: 0 0px;
-      border-radius: 1px;
-      vertical-align: middle;
-      position: relative;
-      top: -1px;
-    }
-    .logo-img {
-      height: 30px;
-      width: auto;
-      max-width: 260px;
-      display: block;
-      object-fit: contain;
-    }
+    .logo { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
 
     .nav-links {
       display: flex;
@@ -516,7 +389,7 @@ $product_schema = [
       padding: 10px 8px;
     }
 
-    
+    /* --- Comparison Table --- */
     .comparison-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--line); }
     .comparison-table { width: 100%; border-collapse: collapse; }
     .comparison-table thead th {
@@ -543,7 +416,7 @@ $product_schema = [
     .ct-cross { color: #EF4444; }
     .ct-check svg, .ct-cross svg { width: 22px; height: 22px; vertical-align: middle; }
 
-    
+    /* --- Stats Circular Progress --- */
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: center; }
     .stats-image { border-radius: 12px; overflow: hidden; }
     .stats-image img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; display: block; }
@@ -573,7 +446,7 @@ $product_schema = [
     }
     .stat-text { color: var(--text); font-size: 15px; line-height: 1.4; }
 
-    
+    /* --- Before/After --- */
     .ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .ba-pair {
       background: var(--surface);
@@ -599,7 +472,7 @@ $product_schema = [
     .ba-after { background: rgba(34,197,94,.85); color: #fff; }
     .ba-caption { text-align: center; color: var(--muted); font-size: 14px; padding-top: 8px; margin: 0; }
 
-    
+    /* --- Reviews Masonry + Verified --- */
     .quote-grid {
       columns: 3;
       column-gap: 12px;
@@ -858,33 +731,29 @@ $product_schema = [
     }
 
     .carrier-row {
-      margin-top: 14px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-    }
-    /* Carrier logo container — limpio, sin pill de texto */
-    .carrier-chip {
-      display: inline-flex;
-      align-items: center;
-      opacity: .88;
-      transition: opacity .15s;
-    }
-    .carrier-chip:hover { opacity: 1; }
-    .carrier-chip img {
-      height: 28px;
-      width: auto;
-      display: block;
-    }
-
-    /* Logos de tarjetas aceptadas (Visa, MC, Amex) */
-    .card-logos {
+      margin-top: 12px;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+    }
+    .carrier-chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
       align-items: center;
-      margin-bottom: 8px;
+      gap: 8px;
+    }
+    .carrier-chip img {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      object-fit: cover;
+      background: var(--surface);
     }
 
     .payment-badges {
@@ -898,14 +767,10 @@ $product_schema = [
       border: 1px solid var(--line);
       background: var(--surface);
       border-radius: 999px;
-      padding: 5px 10px;
+      padding: 6px 10px;
       color: var(--muted);
       font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
     }
-    .payment-badges span svg { color: var(--green-text); flex-shrink: 0; }
     .order-flow {
       margin-top: 12px;
       display: grid;
@@ -1201,8 +1066,8 @@ $product_schema = [
       align-items: center;
     }
     .brand-chip {
-      border: 1px solid var(--line);
-      background: var(--surface);
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
       border-radius: 8px;
       min-height: 38px;
       padding: 7px 11px;
@@ -1437,7 +1302,7 @@ $product_schema = [
       border-color: #f59e0b;
       color: #78350f;
     }
-    
+    /* Addon clock – light mode contrast fixes */
     .theme-light .addon-clock {
       background: rgba(249,115,22,.12);
       border-color: rgba(249,115,22,.5);
@@ -1448,28 +1313,28 @@ $product_schema = [
       border-color: #ef4444;
       color: #991b1b;
     }
-    
+    /* Tier note – light mode */
     .theme-light .tier-note { color: #15803d; }
-    
+    /* NIT status colors – light mode */
     .theme-light .nit-status.ok { color: #15803d; }
     .theme-light .nit-status.err { color: #b91c1c; }
     .theme-light .nit-status.wait { color: #a16207; }
-    
+    /* Button danger/success – light mode text */
     .theme-light .btn-danger { background: #dc2626; color: #fff; }
     .theme-light .btn-success { background: #16a34a; color: #fff; }
-    
+    /* Combo option – light mode */
     .theme-light .combo-option { background: var(--surface); border-color: var(--line); }
     .theme-light .combo-option input:checked + .combo-label { color: var(--text); }
-    
+    /* Addon box – light mode */
     .theme-light .addon-box { background: var(--surface); border-color: var(--line); }
     .theme-light .checkout-box { background: var(--surface); border-color: var(--line); }
-    
+    /* Urgency badge – force white text on colored bg in light mode */
     .theme-light .urgency { color: #fff; }
     .theme-light .urgency-label { color: #fff; }
     .theme-light .urgency-time { color: #fff; background: rgba(0,0,0,.25); }
-    
+    /* Discount text */
     .theme-light .discount { color: var(--green-text); }
-    
+    /* Ship option & totals */
     .theme-light .ship-option { background: var(--surface); border-color: var(--line); color: var(--text); }
     .theme-light .total-row strong { color: var(--text); }
     .theme-light .addons-list li { color: var(--text); }
@@ -1510,105 +1375,5 @@ $product_schema = [
     body { font-family: var(--font-body); }
     h1, h2, h3 { font-family: var(--font-headings); }
     .btn, .nav-links, .announcement, .hero-kicker, .urgency { font-family: var(--font-ui); }
-
-    /* ── STICKY CTA BAR ─────────────────────────────────────────────────── */
-    .sticky-cta {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      z-index: 50;
-      background: rgba(15,23,42,.97);
-      border-top: 1px solid var(--line);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      transform: translateY(110%);
-      transition: transform .35s cubic-bezier(.22,1,.36,1);
-      box-shadow: 0 -6px 32px rgba(0,0,0,.4);
-    }
-    .sticky-cta.visible { transform: translateY(0); }
-    .sticky-cta-left { display: flex; flex-direction: column; gap: 1px; }
-    .sticky-cta-left .cta-price { font-size: 22px; font-weight: 900; color: var(--orange); line-height: 1; }
-    .sticky-cta-left .cta-old { font-size: 12px; color: var(--muted); text-decoration: line-through; }
-    .sticky-cta-left .cta-badge {
-      font-size: 11px; color: var(--green-text); font-weight: 700;
-      background: rgba(20,255,120,.08); border: 1px solid rgba(20,255,120,.18);
-      border-radius: 4px; padding: 1px 5px; display: inline-block;
-    }
-    .sticky-cta .btn-sticky {
-      flex-shrink: 0; padding: 12px 22px; font-size: 15px; font-weight: 800;
-      background: var(--orange); color: #fff; border: none;
-      border-radius: var(--radius); cursor: pointer; text-decoration: none;
-      display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
-      transition: background .15s, transform .12s;
-    }
-    .sticky-cta .btn-sticky:hover { background: #ea580c; transform: scale(1.02); }
-    body.has-sticky-cta { padding-bottom: 80px; }
-    .theme-light .sticky-cta { background: rgba(255,255,255,.97); border-color: var(--line); }
-
-    /* ── REVIEWS TOGGLE ─────────────────────────────────────────────────── */
-    .review-hidden { display: none !important; }
-    .reviews-toggle-wrap { text-align: center; margin-top: 28px; }
-    .btn-outline {
-      background: transparent; border: 1.5px solid var(--line-2); color: var(--muted);
-      padding: 10px 24px; border-radius: var(--radius); font-size: 14px;
-      font-weight: 600; cursor: pointer; transition: border-color .15s, color .15s;
-    }
-    .btn-outline:hover { border-color: var(--orange); color: var(--orange); }
-    #reviews-toggle-icon { display: inline-block; transition: transform .25s; margin-left: 4px; }
-    #reviews-toggle-icon.open { transform: rotate(180deg); }
-</style>
-</head>
-<body>
   
-
-  <!-- ── STICKY CTA BAR (aparece al scrollar) ──────────────────────── -->
-  <?php
-  $hero_price_new = ma_get('hero_price_new', '$49.00');
-  $hero_price_old = ma_get('hero_price_old', '$79.00');
-  $hero_discount  = ma_get('hero_discount_label', 'Ahorra 38% hoy');
-  ?>
-  <div class="sticky-cta" id="sticky-cta" role="complementary" aria-label="Comprar ahora">
-    <div class="sticky-cta-left">
-      <span class="cta-price"><?= esc_html($hero_price_new) ?></span>
-      <span class="cta-old"><?= esc_html($hero_price_old) ?></span>
-      <span class="cta-badge"><?= esc_html($hero_discount) ?></span>
-    </div>
-    <a href="#checkout" class="btn-sticky" id="sticky-cta-btn">Quiero el mío →</a>
-  </div>
-
-  <div class="nav-wrap">
-    <div class="wrap nav">
-      <a href="<?php echo esc_url(home_url('/')); ?>" class="logo" aria-label="Mundo Accesorios - Inicio">
-<?php
-$logo_url  = ma_get('logo_url', '');
-$logo_text = ma_get('logo_text', 'MUNDO ACCESORIOS');
-if ( $logo_url ) :
-?>
-        <img src="<?= esc_url($logo_url) ?>" alt="<?= esc_attr($logo_text) ?>" class="logo-img" />
-<?php else :
-    // Logo CSS — texto con cuadrito rojo entre las dos C
-    $parts = explode('ACCESORIOS', strtoupper($logo_text), 2);
-    if ( count($parts) === 2 ) {
-        echo esc_html($parts[0]) . 'AC<span class="logo-dot"></span>CESORIOS';
-    } else {
-        echo esc_html($logo_text);
-    }
-endif;
-?>
-      </a>
-      <nav class="nav-links">
-        <a href="#demo">Beneficios</a>
-        <a href="#detalle">Detalles</a>
-        <a href="#oferta">Ofertas</a>
-        <a href="#checkout">Checkout</a>
-        <a href="#faq">FAQ</a>
-      </nav>
-      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Cambiar tema"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
-    </div>
-  </div>
-
   

@@ -366,7 +366,7 @@ add_action( 'admin_footer', function() {
  * Enqueue scripts and styles.
  */
 function mundoaccesorios_scripts() {
-	wp_enqueue_style( 'mundoaccesorios-style', get_stylesheet_uri(), array(), '1.0' );
+	wp_enqueue_style( 'mundoaccesorios-style', get_stylesheet_uri(), array(), filemtime( get_stylesheet_directory() . '/style.css' ) );
 
 	    wp_enqueue_script( 'mundoaccesorios-main', get_template_directory_uri() . '/assets/js/main.js', array(), '2.0.3', true );
 

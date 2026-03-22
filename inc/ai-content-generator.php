@@ -285,34 +285,35 @@ function ma_ai_render_panel() {
                         <option value="9">10. Condominio Verde / VW Red / Hombre Latino 42-50</option>
                         <option value="10">11. Avatar Hablante (Optimizado Lip-Sync)</option>
                         <option value="11">12. Vestuario Digital (Cambiar ropa a la foto)</option>
+                        <option value="12">13. Producto: Toma Cinemática (Ideal Inanimados)</option>
                     </select>
 
                     <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:6px">Prompt final para Veo (Puedes personalizar el diálogo o carro)</label>
                     <textarea id="ai_vid_desc" rows="6" placeholder="Ej: Toma cinemática de dron..." style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:12px;font-family:monospace;box-sizing:border-box"></textarea>
                 </div>
-                <button type="button" id="ma-ai-gen-video" style="background:linear-gradient(135deg, #ec4899, #be185d);color:#fff;padding:12px 16px;border-radius:8px;border:none;font-size:14px;font-weight:600;width:100%;cursor:pointer;box-shadow:0 4px 6px -1px rgba(236,72,153,0.3);transition:0.2s">
-                    🎥 Iniciar Renderizado Veo (2-4 min)
-                </button>
-
-                <div style="margin-top:20px;padding-top:16px;border-top:1px solid #e5e7eb">
-                    <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:6px">✍️ Asistente de Guiones (Crea el texto para tu actor/voz en off)</label>
-                    <div style="display:flex;gap:10px;margin-bottom:10px">
-                        <select id="ai_vid_script_type" style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;">
-                            <option value="ugc">1. UGC Clásico (Selfie/Testimonial realista)</option>
-                            <option value="ba">2. Before & After (Antes/Después)</option>
-                            <option value="top3">3. Top 3 Razones</option>
-                            <option value="hook">4. Hook con Pregunta Provocadora</option>
-                            <option value="lifestyle">5. Estilo Aspiracional (Lifestyle)</option>
-                            <option value="fbhook">6. Hooks de 3 Segundos (Facebook Ads)</option>
-                            <option value="curiosity">7. Curiosidad + Emoción (Ej: Lo que nadie te dice...)</option>
-                            <option value="promise">8. Promesa Directa (Ej: Resultados en 7 días...)</option>
-                        </select>
-                        <button type="button" id="ma-ai-gen-script" style="background:#111827;color:#fff;padding:10px 14px;border-radius:6px;border:none;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">
-                            Generar Guion
-                        </button>
+                    <div style="margin-top:20px;padding-top:16px;border-top:1px solid #e5e7eb">
+                        <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:6px">✍️ Asistente de Guiones (Crea el texto para tu actor/voz en off)</label>
+                        <div style="display:flex;gap:10px;margin-bottom:10px">
+                            <select id="ai_vid_script_type" style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;">
+                                <option value="ugc">1. UGC Clásico (Selfie/Testimonial realista)</option>
+                                <option value="ba">2. Before & After (Antes/Después)</option>
+                                <option value="top3">3. Top 3 Razones</option>
+                                <option value="hook">4. Hook con Pregunta Provocadora</option>
+                                <option value="lifestyle">5. Estilo Aspiracional (Lifestyle)</option>
+                                <option value="fbhook">6. Hooks de 3 Segundos (Facebook Ads)</option>
+                                <option value="curiosity">7. Curiosidad + Emoción (Ej: Lo que nadie te dice...)</option>
+                                <option value="promise">8. Promesa Directa (Ej: Resultados en 7 días...)</option>
+                            </select>
+                            <button type="button" id="ma-ai-gen-script" style="background:#111827;color:#fff;padding:10px 14px;border-radius:6px;border:none;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">
+                                Generar Guion
+                            </button>
+                        </div>
                     </div>
+                    
+                    <button type="button" id="ma-ai-gen-video" style="background:linear-gradient(135deg, #ec4899, #be185d);color:#fff;padding:12px 16px;margin-top:20px;margin-bottom:10px;border-radius:8px;border:none;font-size:14px;font-weight:600;width:100%;cursor:pointer;box-shadow:0 4px 6px -1px rgba(236,72,153,0.3);transition:0.2s">
+                        🎥 Iniciar Renderizado de Video (2-4 min)
+                    </button>
                 </div>
-            </div>
 
             <!-- Feedback ─────────────────── -->
             <div id="ma-ai-progress" style="display:none;margin-top:16px;padding:16px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb">
@@ -373,7 +374,8 @@ function ma_ai_render_panel() {
 `IMPORTANT (NO ON-SCREEN TEXT):\n- Do NOT generate any on-screen text of any kind...\nABSOLUTE REFERENCE LOCK (NON-NEGOTIABLE):\n- Use the attached reference image as the ONLY source of truth...\nFORMAT:\n- Vertical 9:16.\nLOCATION:\n- Residential garage with door open; daylight spill.\nCAR:\n- Mazda, blue.\nCAST / WARDROBE / VIBE:\n- Latina female, 30–38, camisa de mezclilla.\nDIALOGUE:\n“Yo antes dejaba el carro opaco por falta de tiempo. Con esto lo dejo presentable en minutos.”\nSHOT LIST: \n1) Medium shot...\n2) Close-up spray...`,
 `IMPORTANT (NO ON-SCREEN TEXT):\n- Do NOT generate any on-screen text of any kind...\nABSOLUTE REFERENCE LOCK (NON-NEGOTIABLE):\n- Use the attached reference image as the ONLY source of truth...\nFORMAT:\n- Vertical 9:16.\nLOCATION:\n- Condominium parking with plants/greenery, sunny day.\nCAR:\n- VW, red.\nCAST / WARDROBE / VIBE:\n- Latino male, 42–50, polo blanco.\nDIALOGUE:\n“Si quieres brillo real sin perder tiempo, este spray es lo más práctico que he probado.”\nSHOT LIST: \n1) Medium shot...\n2) Close-up spray...`,
 `Subject: Use the exact uploaded image. Do not modify the face, body, pose, clothing, or background. Only animate lips, eyes, and very subtle natural head micro-movements.\nBackground: Keep identical to the original input photo.\nStyle: POV influencer-style talking video, handheld subtle camera motion, ultra-realistic. Vertical 9:16.\nDialogue: in Spanish, Latin American accent. Add a short 1-second natural pause before speaking. Say: "[SCRIPT]"\nAudio: Voice only. Add 0.5 seconds of silence before and after the spoken line to stabilize synchronization.\nModel: veo-3\nDuration: 8 seconds\nResolution: 720p (9:16)`,
-`Subject: Same person from the uploaded image, keep the same face and appearance. Do NOT change the face.\nBackground: Keep the same as the uploaded image.\nClothing: The person is wearing [DESCRIBE LA NUEVA ROPA AQUÍ].\nAction: The person shows off the new outfit and speaks to the camera.\nStyle: realistic, handheld selfie-style, vertical 9:16.\nDialogue: in Spanish. Say: "[SCRIPT]"\nBackground sounds: none\nModel: veo-3\nDuration: 8 seconds`
+`Subject: \nKeep the exact background from the uploaded image.\nClothing: The person is wearing [DESCRIBE LA NUEVA ROPA AQUÍ].\nAction: The person shows off the new outfit and smiles at the camera.\nStyle: realistic, vertical 9:16.\nModel: veo-3\nDuration: 8 seconds`,
+`Subject: Use exactly the uploaded image as the product reference.\nScene: High-end cinematic studio product shot. The product is placed on a clean reflective surface with dramatic, moody studio lighting.\nAction: Slow, smooth cinematic 360-degree camera pan around the product showing off its textures and details.\nStyle: Ultra-realistic 4k commercial b-roll, vertical 9:16.\nModel: veo-3\nDuration: 6 seconds`
         ];
 
         $('#ai_vid_template').on('change', function() {
@@ -1564,7 +1566,11 @@ add_action( 'wp_ajax_ma_ai_generate_video_check', function() {
     $video_b64 = '';
     $video_uri = '';
     
-    if ( isset($body['response']['generatedVideo']['video']['videoBytes']) ) {
+    if ( isset($body['response']['generatedSamples'][0]['video']['uri']) ) {
+         $video_uri = $body['response']['generatedSamples'][0]['video']['uri'];
+    } elseif ( isset($body['response']['generatedSamples'][0]['video']['videoBytes']) ) {
+         $video_b64 = $body['response']['generatedSamples'][0]['video']['videoBytes'];
+    } elseif ( isset($body['response']['generatedVideo']['video']['videoBytes']) ) {
          $video_b64 = $body['response']['generatedVideo']['video']['videoBytes'];
     } elseif ( isset($body['response']['generatedVideo']['video']['uri']) ) {
          $video_uri = $body['response']['generatedVideo']['video']['uri'];
@@ -1577,13 +1583,22 @@ add_action( 'wp_ajax_ma_ai_generate_video_check', function() {
     } elseif ( isset($body['metadata']['video']['bytesBase64Encoded']) ) {
          $video_b64 = $body['metadata']['video']['bytesBase64Encoded'];
     } else {
-         // Fallback exploratorio
+         // Fallback exploratorio definitivo con Regex para absorber cambios de Google
          $json_resp = json_encode($body['response'] ?? []);
-         if (preg_match('/"([a-zA-Z0-9+\/]+={0,2})"/', $json_resp, $m) && strlen($m[1]) > 20000) {
-             $video_b64 = $m[1];
-         } else {
+         
+         // Intentar buscar un URI puro
+         if (preg_match('/"uri"\s*:\s*"([^"]+)"/', $json_resp, $m_uri)) {
+             $video_uri = $m_uri[1];
+             // Remover barras de escape si json_encode agregó \/
+             $video_uri = stripslashes(str_replace('\/', '/', $video_uri));
+         } 
+         // O intentar buscar videoBytes gigantescos
+         elseif (preg_match('/"([a-zA-Z0-9+\/]+={0,2})"/', $json_resp, $m_b64) && strlen($m_b64[1]) > 20000) {
+             $video_b64 = $m_b64[1];
+         } 
+         else {
              $keys = json_encode($body['response']);
-             wp_send_json_error("Video generado: $keys");
+             wp_send_json_error("Video generado (Array Parse Falied): $keys");
          }
     }
 
@@ -1593,8 +1608,18 @@ add_action( 'wp_ajax_ma_ai_generate_video_check', function() {
 
     // Save MP4 to FTP
     if (!empty($video_uri)) {
-        $video_data = wp_remote_retrieve_body(wp_remote_get($video_uri, ['timeout' => 60]));
-        if (!$video_data) wp_send_json_error("No se pudo descargar el video del URI proporcionado por Google.");
+        $gemini_key = ma_get('gemini_api_key', '');
+        $sep = strpos($video_uri, '?') !== false ? '&' : '?';
+        $fetch_uri = $video_uri . $sep . 'key=' . $gemini_key;
+        
+        $vid_res = wp_remote_get($fetch_uri, ['timeout' => 60]);
+        $http_code = wp_remote_retrieve_response_code($vid_res);
+        
+        if ( !is_wp_error($vid_res) && $http_code == 200 ) {
+            $video_data = wp_remote_retrieve_body($vid_res);
+        } else {
+            wp_send_json_error(sprintf("Google bloqueó la descarga del archivo (HTTP %s). URL intentada: %s", $http_code, $fetch_uri));
+        }
     } else {
         $video_data = base64_decode($video_b64);
     }

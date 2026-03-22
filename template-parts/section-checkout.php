@@ -1,19 +1,31 @@
 <?php /* section-checkout - Template Part */
+if ( ma_get('hide_sec_checkout') ) return;
 
 // ── Leer variables dinámicas del producto de WooCommerce ───────────────────
 $post_id = get_the_ID();
-$product_title = get_the_title($post_id);
+$product = false;
+
+if (function_exists('wc_get_product')) {
+    $product = wc_get_product($post_id);
+    // Si no es un producto (ej. estamos en la página frontal/funnel), jalamos el producto principal de la tienda
+    if ( ! $product ) {
+        $recent_products = wc_get_products( array( 'limit' => 1, 'return' => 'objects' ) );
+        if ( !empty( $recent_products ) ) {
+            $product = $recent_products[0];
+            $post_id = $product->get_id();
+        }
+    }
+}
+
+$product_title = $product ? $product->get_name() : get_the_title($post_id);
 if (!$product_title) $product_title = "Producto Principal";
 
 $product_image = get_the_post_thumbnail_url($post_id, 'medium');
 if (!$product_image) $product_image = ma_get('hero_image_url', '');
 
 $wc_price = 49;
-if (function_exists('wc_get_product')) {
-    $product = wc_get_product($post_id);
-    if ($product && !empty($product->get_price())) {
-        $wc_price = (float) $product->get_price();
-    }
+if ($product && !empty($product->get_price())) {
+    $wc_price = (float) $product->get_price();
 }
 
 // Valores por defecto calculados algorítmicamente
@@ -208,7 +220,7 @@ $initial_total      = 'Q' . number_format( (float)$combos[0]['subtotal'] + (floa
           <div class="field"><label for="cf-reference">Referencia de entrega</label><input id="cf-reference" name="reference" placeholder="Ejemplo: Portón azul, casa #12" /></div>
           <div class="field"><label for="cf-nit">NIT *</label><input id="cf-nit" name="nit" placeholder="Ingresa NIT o CF" required /><div class="nit-actions"><button type="button" class="btn btn-danger" id="validate-nit-btn" aria-label="Validar NIT">Validar NIT</button><button type="button" class="btn btn-success" id="cf-btn" aria-label="Consumidor Final">CF</button></div><p id="nit-status" class="nit-status"></p></div>
           <div class="field"><label for="cf-email">Correo electrónico</label><input id="cf-email" name="email" type="email" /></div>
-          <div class="field"><label for="cf-pay-method">2. Método de pago *</label><select id="cf-pay-method" name="pay_method" required><option value="">Selecciona método de pago</option><option value="card">Tarjeta (Crédito/Débito)</option><option value="cod">Pago contra entrega</option></select><p style="margin:8px 0 0;font-size:12px;font-weight:700;color:#d8d8d8;">Tarjetas y métodos aceptados</p><div class="card-brands"><span class="brand-chip" title="Visa"><img src="https://cdn.simpleicons.org/visa/1A1F71" alt="Visa" loading="lazy" /></span><span class="brand-chip" title="Mastercard"><img src="https://cdn.simpleicons.org/mastercard/EB001B" alt="Mastercard" loading="lazy" /></span><span class="brand-chip" title="American Express"><img src="https://cdn.simpleicons.org/americanexpress/2E77BC" alt="American Express" loading="lazy" /></span><span class="brand-chip" title="Apple Pay"><img src="https://cdn.simpleicons.org/applepay/000000" alt="Apple Pay" loading="lazy" /></span><span class="brand-chip" title="Stripe"><img src="https://cdn.simpleicons.org/stripe/635BFF" alt="Stripe" loading="lazy" /></span></div></div>
+          <div class="field"><label for="cf-pay-method">2. Método de pago *</label><select id="cf-pay-method" name="pay_method" required><option value="">Selecciona método de pago</option><option value="card">Tarjeta (Crédito/Débito)</option><option value="cod">Pago contra entrega</option></select><p style="margin:8px 0 0;font-size:12px;font-weight:700;color:#d8d8d8;">Tarjetas y métodos aceptados</p><div class="card-brands"><span class="brand-chip" title="Visa" style="background:#ffffff;border-color:#cbd5e1;"><img src="https://cdn.simpleicons.org/visa/1A1F71" alt="Visa" loading="lazy" /></span><span class="brand-chip" title="Mastercard" style="background:#ffffff;border-color:#cbd5e1;"><img src="https://cdn.simpleicons.org/mastercard/EB001B" alt="Mastercard" loading="lazy" /></span><span class="brand-chip" title="American Express" style="background:#ffffff;border-color:#cbd5e1;"><img src="https://cdn.simpleicons.org/americanexpress/2E77BC" alt="American Express" loading="lazy" /></span><span class="brand-chip" title="Apple Pay" style="background:#ffffff;border-color:#cbd5e1;"><img src="https://cdn.simpleicons.org/applepay/000000" alt="Apple Pay" loading="lazy" /></span><span class="brand-chip" title="Stripe" style="background:#ffffff;border-color:#cbd5e1;"><img src="https://cdn.simpleicons.org/stripe/635BFF" alt="Stripe" loading="lazy" /></span></div></div>
           <div class="field full"><label for="cf-address">Dirección completa *</label><textarea id="cf-address" name="address" required></textarea></div>
         </div>
 
